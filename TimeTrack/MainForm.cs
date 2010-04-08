@@ -21,7 +21,7 @@ namespace TimeTrack
         
         private void timerMainForm_Load(object sender, EventArgs e)
         {
-            summaryList.Sorting = SortOrder.Descending;
+            summaryListView.Sorting = SortOrder.Descending;
             isRunning = false;
 
         }
@@ -48,7 +48,7 @@ namespace TimeTrack
 
             if (isRunning == true)
             {
-                currentTask.EndTime = DateTime.Now; //+ TimeSpan.FromMinutes(120);
+                currentTask.EndTime = DateTime.Now+ TimeSpan.FromMinutes(120);
 
                 // remove the bottom row of the list, where it shows the current task
                 timeList.Items.RemoveAt(timeList.Items.Count-1);
@@ -124,35 +124,28 @@ namespace TimeTrack
 
         private void generateSummaryList()
         {
-            summaryList.Items.Clear();
+            summaryListView.Items.Clear();
+            List<SummaryTask> summaryList = new List<SummaryTask>();
 
             // lopp through each item in the orginal list
             // and add it to the summary list if it doesnt already exist.
             // update the total time if it does.
             foreach(ListViewItem taskEntry in timeList.Items) {
-                string[] summaryRow = new string[2];
-                summaryRow[0] = taskEntry.SubItems[2].Text; // duration
-                summaryRow[1] = taskEntry.SubItems[3].Text; // name
-                
-                // not ideal to check for the final item this way, but whatever
-                if(summaryRow[0] == "--") {
-                    continue;
-                }
-                // check if this item is already in the summary list or not
-                if(summaryList.Items.Find(summaryRow[1], true).Length == 0) {
-                    ListViewItem newRow = new ListViewItem(summaryRow);
-                    newRow.Name = summaryRow[1];
-                    summaryList.Items.Add(newRow);
+                TimeTask currentTask = taskEntry.Tag as TimeTask;
+                SummaryTask sumItem = summaryList.Find(delegate(SummaryTask st) {return st.TaskName == currentTask.TaskName;});
+                if(sumItem == null) {
+                    summaryList.Add(new SummaryTask(currentTask.TaskName, currentTask.Duration));
                 } else {
-                    // it already exists, so add the duration of the current item
-                    ListViewItem curItem = summaryList.Items.Find(summaryRow[1], true)[0];
-                    TimeSpan newDuration = TimeSpan.Parse(curItem.SubItems[0].Text) + TimeSpan.Parse(summaryRow[0]);
-
-                    curItem.SubItems[0].Text = String.Format("{0:d2}:{1:d2}", newDuration.Hours, newDuration.Minutes);
+                    sumItem.Duration += currentTask.Duration;
                 }
             }
 
-            summaryList.Sort();
+            // now we have the summary duration for all the tasks, we can go ahead and add it all
+            // to the listview. They will be sorted by the listview automatically.
+            foreach(SummaryTask st in summaryList) {
+                summaryListView.Items.Add(st.toListViewItem());
+            }
+
         }
     }
 
@@ -207,6 +200,34 @@ namespace TimeTrack
         public override string ToString()
         {
             return String.Format("{0:d2}:{1:d2}:{2:d2}", this.Duration.Hours,this.Duration.Minutes, this.Duration.Seconds);
+        }
+    }
+
+    public class SummaryTask {
+        private string _taskName;
+        private TimeSpan _duration;
+
+        public string TaskName {  get { return _taskName; } set { _taskName = value; }}
+        public TimeSpan Duration { get { return _duration; }  set { _duration = value; }}
+
+        public SummaryTask(string TaskName) {
+            this.TaskName = TaskName;
+        }
+
+        public SummaryTask(string TaskName, TimeSpan Duration) {
+            this.TaskName = TaskName;
+            this.Duration = Duration;
+        }
+        
+        public ListViewItem toListViewItem()
+        {
+            string[] listItems = new string[2];
+            listItems[0] = String.Format("{0:d2}:{1:d2}", this.Duration.Hours, this.Duration.Minutes); 
+            listItems[1] = this.TaskName;
+
+            ListViewItem newItem = new ListViewItem(listItems);
+            newItem.Tag = this;
+            return newItem;
         }
     }
 }

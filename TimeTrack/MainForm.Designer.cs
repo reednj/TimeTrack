@@ -50,7 +50,7 @@ namespace TimeTrack
             this.DurHeader1 = new System.Windows.Forms.ColumnHeader();
             this.NameHeader1 = new System.Windows.Forms.ColumnHeader();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.summaryList = new System.Windows.Forms.ListView();
+            this.summaryListView = new System.Windows.Forms.ListView();
             this.columnHeader1 = new System.Windows.Forms.ColumnHeader();
             this.columnHeader2 = new System.Windows.Forms.ColumnHeader();
             this.notifyContext.SuspendLayout();
@@ -214,7 +214,7 @@ namespace TimeTrack
             // 
             // tabPage2
             // 
-            this.tabPage2.Controls.Add(this.summaryList);
+            this.tabPage2.Controls.Add(this.summaryListView);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
@@ -223,18 +223,18 @@ namespace TimeTrack
             this.tabPage2.Text = "Summary";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
-            // summaryList
+            // summaryListView
             // 
-            this.summaryList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.summaryListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader1,
             this.columnHeader2});
-            this.summaryList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.summaryList.Location = new System.Drawing.Point(3, 3);
-            this.summaryList.Name = "summaryList";
-            this.summaryList.Size = new System.Drawing.Size(199, 248);
-            this.summaryList.TabIndex = 7;
-            this.summaryList.UseCompatibleStateImageBehavior = false;
-            this.summaryList.View = System.Windows.Forms.View.Details;
+            this.summaryListView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.summaryListView.Location = new System.Drawing.Point(3, 3);
+            this.summaryListView.Name = "summaryListView";
+            this.summaryListView.Size = new System.Drawing.Size(199, 248);
+            this.summaryListView.TabIndex = 7;
+            this.summaryListView.UseCompatibleStateImageBehavior = false;
+            this.summaryListView.View = System.Windows.Forms.View.Details;
             // 
             // columnHeader1
             // 
@@ -294,7 +294,7 @@ namespace TimeTrack
         private System.Windows.Forms.ColumnHeader DurHeader1;
         private System.Windows.Forms.ColumnHeader NameHeader1;
         private System.Windows.Forms.TabPage tabPage2;
-        private System.Windows.Forms.ListView summaryList;
+        private System.Windows.Forms.ListView summaryListView;
         private System.Windows.Forms.ColumnHeader columnHeader1;
         private System.Windows.Forms.ColumnHeader columnHeader2;
     }
