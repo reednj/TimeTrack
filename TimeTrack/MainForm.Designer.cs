@@ -29,19 +29,12 @@ namespace TimeTrack
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(timerMainForm));
             this.timerLabel = new System.Windows.Forms.Label();
             this.startStopButton = new System.Windows.Forms.Button();
             this.mainTimer = new System.Windows.Forms.Timer(this.components);
             this.curTaskLabel = new System.Windows.Forms.Label();
             this.chromeTimer = new System.Windows.Forms.Timer(this.components);
             this.taskNameTxt = new System.Windows.Forms.ComboBox();
-            this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
-            this.notifyContext = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.testToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.mmarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.blahToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.quitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.timeList = new System.Windows.Forms.ListView();
@@ -53,7 +46,6 @@ namespace TimeTrack
             this.summaryListView = new System.Windows.Forms.ListView();
             this.columnHeader1 = new System.Windows.Forms.ColumnHeader();
             this.columnHeader2 = new System.Windows.Forms.ColumnHeader();
-            this.notifyContext.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -111,50 +103,6 @@ namespace TimeTrack
             this.taskNameTxt.Text = "Type Task Code Here";
             this.taskNameTxt.Enter += new System.EventHandler(this.taskNameTxt_Enter);
             this.taskNameTxt.KeyDown += new System.Windows.Forms.KeyEventHandler(this.taskNameTxt_KeyDown);
-            // 
-            // notifyIcon
-            // 
-            this.notifyIcon.ContextMenuStrip = this.notifyContext;
-            this.notifyIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon.Icon")));
-            this.notifyIcon.Text = "notifyIcon1";
-            this.notifyIcon.Visible = true;
-            this.notifyIcon.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.notifyIcon_MouseDoubleClick);
-            // 
-            // notifyContext
-            // 
-            this.notifyContext.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.testToolStripMenuItem,
-            this.quitToolStripMenuItem});
-            this.notifyContext.Name = "notifyContext";
-            this.notifyContext.Size = new System.Drawing.Size(132, 48);
-            // 
-            // testToolStripMenuItem
-            // 
-            this.testToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mmarToolStripMenuItem,
-            this.blahToolStripMenuItem});
-            this.testToolStripMenuItem.Name = "testToolStripMenuItem";
-            this.testToolStripMenuItem.Size = new System.Drawing.Size(131, 22);
-            this.testToolStripMenuItem.Text = "New Task";
-            this.testToolStripMenuItem.Click += new System.EventHandler(this.testToolStripMenuItem_Click);
-            // 
-            // mmarToolStripMenuItem
-            // 
-            this.mmarToolStripMenuItem.Name = "mmarToolStripMenuItem";
-            this.mmarToolStripMenuItem.Size = new System.Drawing.Size(111, 22);
-            this.mmarToolStripMenuItem.Text = "mmar";
-            // 
-            // blahToolStripMenuItem
-            // 
-            this.blahToolStripMenuItem.Name = "blahToolStripMenuItem";
-            this.blahToolStripMenuItem.Size = new System.Drawing.Size(111, 22);
-            this.blahToolStripMenuItem.Text = "blah";
-            // 
-            // quitToolStripMenuItem
-            // 
-            this.quitToolStripMenuItem.Name = "quitToolStripMenuItem";
-            this.quitToolStripMenuItem.Size = new System.Drawing.Size(131, 22);
-            this.quitToolStripMenuItem.Text = "Quit";
             // 
             // tabControl1
             // 
@@ -262,8 +210,8 @@ namespace TimeTrack
             this.Name = "timerMainForm";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.Text = "Time Tracker";
+            this.Activated += new System.EventHandler(this.timerMainForm_Activated);
             this.Load += new System.EventHandler(this.timerMainForm_Load);
-            this.notifyContext.ResumeLayout(false);
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
@@ -280,12 +228,6 @@ namespace TimeTrack
         private System.Windows.Forms.Label curTaskLabel;
         private System.Windows.Forms.Timer chromeTimer;
         private System.Windows.Forms.ComboBox taskNameTxt;
-        private System.Windows.Forms.NotifyIcon notifyIcon;
-        private System.Windows.Forms.ContextMenuStrip notifyContext;
-        private System.Windows.Forms.ToolStripMenuItem testToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem quitToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem mmarToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem blahToolStripMenuItem;
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.ListView timeList;

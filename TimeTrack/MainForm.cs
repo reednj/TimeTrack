@@ -48,7 +48,7 @@ namespace TimeTrack
 
             if (isRunning == true)
             {
-                currentTask.EndTime = DateTime.Now+ TimeSpan.FromMinutes(120);
+                currentTask.EndTime = DateTime.Now;
 
                 // remove the bottom row of the list, where it shows the current task
                 timeList.Items.RemoveAt(timeList.Items.Count-1);
@@ -146,6 +146,11 @@ namespace TimeTrack
                 summaryListView.Items.Add(st.toListViewItem());
             }
 
+        }
+
+        private void timerMainForm_Activated(object sender, EventArgs e)
+        {
+            taskNameTxt.Focus();
         }
     }
 
