@@ -27,8 +27,9 @@ namespace TimeTrack
             this.currentState = TimerState.Stopped;
             summaryListView.Sorting = SortOrder.Descending;
 
-            // load the previously saved results.
+            // load the previously saved results, as well as the common task list
             this.PopulateTaskListView(DataStorage.ReadTaskList());
+            this.PopulateCommonTaskList(DataStorage.ReadCommonTasks());
 
             // if we have added some tasks then start the timer.
             if(timeListView.Items.Count > 0) {
@@ -42,11 +43,6 @@ namespace TimeTrack
             }
 
             this.updateControlState();
-        }
-
-        private void startStopButton_Click(object sender, EventArgs e)
-        {
-            startNewTask();
         }
 
         private void startNewTask()
@@ -75,9 +71,9 @@ namespace TimeTrack
 
             // add the task to the combobox if its not already in there
             if(taskNameTxt.FindString(taskNameTxt.Text) == -1) {
-                taskNameTxt.Items.Add(taskNameTxt.Text);
+                taskNameTxt.Items.Insert(0, taskNameTxt.Text);
+                DataStorage.SaveCommonTasks(this.GetCommonTasks());
             }
-            
             
             currentTask = new TimeTask(taskNameTxt.Text, DateTime.Now);
             taskNameTxt.Text = "";
@@ -89,6 +85,10 @@ namespace TimeTrack
 
             // regenerate the summary list
             this.generateSummaryList();
+
+            // save the new task list to the disk
+            DataStorage.SaveTaskList(this.GetTaskList());
+            
         }
 
         private void finishCurrentTask()
@@ -105,11 +105,6 @@ namespace TimeTrack
             }
         }
 
-        private void mainTimer_Tick(object sender, EventArgs e)
-        {
-            this.updateTimerLabel();
-        }
-
         private void updateTimerLabel()
         {
             timerLabel.Text = currentTask.ToString();
@@ -123,13 +118,6 @@ namespace TimeTrack
 
         private void taskNameTxt_KeyDown(object sender, KeyEventArgs e)
         {
-            // get rid of the hint text, really should check against the 
-            // forecolor, should have a flag instead. but dont care right now
-            if(taskNameTxt.ForeColor == Color.Gray) {
-                taskNameTxt.ForeColor = Color.Black;
-                taskNameTxt.Text = "";
-            }
-
             if(e.KeyCode == Keys.Enter) {
                 startNewTask();
                 e.SuppressKeyPress = true;
@@ -166,13 +154,27 @@ namespace TimeTrack
                 summaryListView.Items.Add(st.toListViewItem());
             }
 
-            DataStorage.SaveTaskList(this.GetTaskList());
+
         }
 
-        private void timerMainForm_Activated(object sender, EventArgs e)
+        private string[] GetCommonTasks()
         {
-            taskNameTxt.Focus();
-            taskNameTxt.Select(0, 0);
+            const int MAX_TASKS = 12;
+            List<string> CommonTaskList = new List<string>();
+            
+            int i = 0;
+            foreach(string s in taskNameTxt.Items) {
+                // we don't want this list getting massive over time.
+                // so just stop after 12 items
+                if(i >= MAX_TASKS) {
+                    break;
+                }
+
+                CommonTaskList.Add(s);
+                i++;
+            }
+
+            return CommonTaskList.ToArray();
         }
 
         private TimeTask[] GetTaskList()
@@ -198,10 +200,15 @@ namespace TimeTrack
             }
         }
 
-        private void clearButton_Click(object sender, EventArgs e)
+        private void PopulateCommonTaskList(string[] CommonTaskList)
         {
-            // clear the list
-            this.clearTaskList();
+            if(CommonTaskList == null) {
+                return;
+            }
+
+            foreach(string s in CommonTaskList) {
+                taskNameTxt.Items.Add(s);
+            }
         }
 
         private void stopTimer()
@@ -212,6 +219,10 @@ namespace TimeTrack
             this.finishCurrentTask();
             this.updateControlState();
             DataStorage.SaveTaskList(this.GetTaskList());
+
+            // update the summary list
+            this.generateSummaryList();
+
         }
 
         private void clearTaskList()
@@ -222,6 +233,7 @@ namespace TimeTrack
 
             // save the cleared list to disk (will save an empty array, not 'null')
             timeListView.Items.Clear();
+            summaryListView.Items.Clear();
             DataStorage.SaveTaskList(this.GetTaskList());
         }
 
@@ -230,13 +242,14 @@ namespace TimeTrack
         {
             if(currentState == TimerState.Stopped) {
 
+                stopButton.Enabled = false;
                 mainTimer.Enabled = false;
                 startStopButton.Text = "Start";
                 curTaskLabel.Text = "...";
                 timerLabel.Text = "00:00:00";
             
             } else if(currentState == TimerState.Running) {
-                
+                stopButton.Enabled = true;
                 mainTimer.Enabled = true;
                 startStopButton.Text = "New Task";
                 curTaskLabel.Text = "Current Task: " + currentTask.TaskName;
@@ -245,10 +258,58 @@ namespace TimeTrack
             }
         }
 
+
+        private void disableTaskNameHint()
+        {
+            // get rid of the hint text, really should check against the 
+            // forecolor, should have a flag instead. but dont care right now
+            if(taskNameTxt.ForeColor == Color.Gray) {
+                taskNameTxt.ForeColor = Color.Black;
+                taskNameTxt.Text = "";
+            }
+        }
+
+
+
+        #region MINOR_EVENTS
+
+        private void startStopButton_Click(object sender, EventArgs e)
+        {
+            startNewTask();
+        }
+
+        private void mainTimer_Tick(object sender, EventArgs e)
+        {
+            this.updateTimerLabel();
+        }
+
+        private void timerMainForm_Activated(object sender, EventArgs e)
+        {
+            taskNameTxt.Focus();
+            taskNameTxt.Select(0, 0);
+        }
+
+        private void clearButton_Click(object sender, EventArgs e)
+        {
+            this.clearTaskList();
+        }
+
         private void stopButton_Click(object sender, EventArgs e)
         {
             this.stopTimer();
         }
+       
+        private void taskNameTxt_TextChanged(object sender, EventArgs e)
+        {
+            this.disableTaskNameHint();
+        }
+
+        private void taskNameTxt_DropDown(object sender, EventArgs e)
+        {
+            this.disableTaskNameHint();
+        }
+
+        #endregion
     }
 
     public class TimeTask {
@@ -361,11 +422,11 @@ namespace TimeTrack
             File.WriteAllText(Application.UserAppDataPath + COMMONTASK_FILE, jsonData);
         }
 
-        public static TimeTask[] ReadCommonTasks() 
+        public static string[] ReadCommonTasks() 
         {
             try {
                 string jsonData = File.ReadAllText(Application.UserAppDataPath + COMMONTASK_FILE);
-                return (TimeTask[])JavaScriptConvert.DeserializeObject(jsonData, typeof(string[]));
+                return (string[])JavaScriptConvert.DeserializeObject(jsonData, typeof(string[]));
             } catch(FileNotFoundException) {
                 return null;
             }

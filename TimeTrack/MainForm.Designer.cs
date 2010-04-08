@@ -103,7 +103,9 @@ namespace TimeTrack
             this.taskNameTxt.Size = new System.Drawing.Size(209, 21);
             this.taskNameTxt.TabIndex = 5;
             this.taskNameTxt.Text = "Type Task Code Here";
+            this.taskNameTxt.TextChanged += new System.EventHandler(this.taskNameTxt_TextChanged);
             this.taskNameTxt.KeyDown += new System.Windows.Forms.KeyEventHandler(this.taskNameTxt_KeyDown);
+            this.taskNameTxt.DropDown += new System.EventHandler(this.taskNameTxt_DropDown);
             // 
             // tabControl1
             // 
