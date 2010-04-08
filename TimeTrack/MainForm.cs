@@ -6,13 +6,16 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 
+using System.IO;
+using Newtonsoft.Json;
+
 namespace TimeTrack
 {
     public partial class timerMainForm : Form
     {
 
-        bool isRunning;
         TimeTask currentTask;
+        TimerState currentState = TimerState.Stopped;
 
         public timerMainForm()
         {
@@ -21,9 +24,24 @@ namespace TimeTrack
         
         private void timerMainForm_Load(object sender, EventArgs e)
         {
+            this.currentState = TimerState.Stopped;
             summaryListView.Sorting = SortOrder.Descending;
-            isRunning = false;
 
+            // load the previously saved results.
+            this.PopulateTaskListView(DataStorage.ReadTaskList());
+
+            // if we have added some tasks then start the timer.
+            if(timeListView.Items.Count > 0) {
+                currentTask = timeListView.Items[timeListView.Items.Count - 1].Tag as TimeTask;
+
+                // we only want to start the timer if there is a current task in the list
+                // and it is running.
+                if(currentTask != null && currentTask.EndTime == currentTask.UndefinedDate) {
+                    this.currentState = TimerState.Running; 
+                }
+            }
+
+            this.updateControlState();
         }
 
         private void startStopButton_Click(object sender, EventArgs e)
@@ -46,24 +64,13 @@ namespace TimeTrack
 
             }
 
-            if (isRunning == true)
+            if (currentState == TimerState.Running)
             {
-                currentTask.EndTime = DateTime.Now;
-
-                // remove the bottom row of the list, where it shows the current task
-                timeList.Items.RemoveAt(timeList.Items.Count-1);
-
-                // add the current task to the task list
-                // but only if it is longer than 5 minutes, otherwise just ignore it
-                if(currentTask.Duration > TimeSpan.FromMinutes(5)) {
-                    timeList.Items.Add(currentTask.toListViewItem());
-                }
+                this.finishCurrentTask();
             }
             else
             {
-                mainTimer.Enabled = true;
-                startStopButton.Text = "New Task";
-                isRunning = true;
+                currentState = TimerState.Running;
             }
 
             // add the task to the combobox if its not already in there
@@ -73,24 +80,39 @@ namespace TimeTrack
             
             
             currentTask = new TimeTask(taskNameTxt.Text, DateTime.Now);
-            curTaskLabel.Text = "Current Task: " + currentTask.TaskName;
             taskNameTxt.Text = "";
 
+            this.updateControlState();
+
             // add the currently running task to the bottom row
-            timeList.Items.Add(currentTask.toListViewItem());
+            timeListView.Items.Add(currentTask.toListViewItem());
 
             // regenerate the summary list
-            generateSummaryList();
+            this.generateSummaryList();
+        }
+
+        private void finishCurrentTask()
+        {
+            currentTask.EndTime = DateTime.Now;
+
+            // remove the bottom row of the list, where it shows the current task
+            timeListView.Items.RemoveAt(timeListView.Items.Count-1);
+
+            // add the current task to the task list
+            // but only if it is longer than 5 minutes, otherwise just ignore it
+            if(currentTask.Duration > TimeSpan.FromMinutes(5)) {
+                timeListView.Items.Add(currentTask.toListViewItem());
+            }
         }
 
         private void mainTimer_Tick(object sender, EventArgs e)
         {
-            timerLabel.Text = currentTask.ToString();
+            this.updateTimerLabel();
         }
 
-        private void taskNameTxt_Enter(object sender, EventArgs e)
+        private void updateTimerLabel()
         {
-
+            timerLabel.Text = currentTask.ToString();
         }
 
         private void chromeTimer_Tick(object sender, EventArgs e)
@@ -119,11 +141,6 @@ namespace TimeTrack
             this.WindowState = FormWindowState.Normal;
         }
 
-        private void testToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void generateSummaryList()
         {
             summaryListView.Items.Clear();
@@ -132,7 +149,7 @@ namespace TimeTrack
             // lopp through each item in the orginal list
             // and add it to the summary list if it doesnt already exist.
             // update the total time if it does.
-            foreach(ListViewItem taskEntry in timeList.Items) {
+            foreach(ListViewItem taskEntry in timeListView.Items) {
                 TimeTask currentTask = taskEntry.Tag as TimeTask;
 
                 SummaryTask sumItem = summaryList.Find(delegate(SummaryTask st) {return st.TaskName == currentTask.TaskName;});
@@ -149,6 +166,7 @@ namespace TimeTrack
                 summaryListView.Items.Add(st.toListViewItem());
             }
 
+            DataStorage.SaveTaskList(this.GetTaskList());
         }
 
         private void timerMainForm_Activated(object sender, EventArgs e)
@@ -156,9 +174,86 @@ namespace TimeTrack
             taskNameTxt.Focus();
             taskNameTxt.Select(0, 0);
         }
+
+        private TimeTask[] GetTaskList()
+        {
+            List<TimeTask> TaskList = new List<TimeTask>();
+            foreach(ListViewItem curItem in timeListView.Items) {
+                TaskList.Add(curItem.Tag as TimeTask);
+            }
+
+            return TaskList.ToArray();
+        }
+
+        private void PopulateTaskListView(TimeTask[] TaskList) 
+        {
+            timeListView.Items.Clear();
+
+            if(TaskList == null) {
+                return;
+            }
+
+            foreach(TimeTask currentTask in TaskList) {
+                timeListView.Items.Add(currentTask.toListViewItem());
+            }
+        }
+
+        private void clearButton_Click(object sender, EventArgs e)
+        {
+            // clear the list
+            this.clearTaskList();
+        }
+
+        private void stopTimer()
+        {
+            // stop the current task, mark it as finished
+            // and save the change to the disk
+            this.currentState = TimerState.Stopped;
+            this.finishCurrentTask();
+            this.updateControlState();
+            DataStorage.SaveTaskList(this.GetTaskList());
+        }
+
+        private void clearTaskList()
+        {
+            // stop the current task
+            this.currentState = TimerState.Stopped;
+            this.updateControlState();
+
+            // save the cleared list to disk (will save an empty array, not 'null')
+            timeListView.Items.Clear();
+            DataStorage.SaveTaskList(this.GetTaskList());
+        }
+
+        // sets the state of the controls based on the current application state
+        private void updateControlState()
+        {
+            if(currentState == TimerState.Stopped) {
+
+                mainTimer.Enabled = false;
+                startStopButton.Text = "Start";
+                curTaskLabel.Text = "...";
+                timerLabel.Text = "00:00:00";
+            
+            } else if(currentState == TimerState.Running) {
+                
+                mainTimer.Enabled = true;
+                startStopButton.Text = "New Task";
+                curTaskLabel.Text = "Current Task: " + currentTask.TaskName;
+                this.updateTimerLabel();
+
+            }
+        }
+
+        private void stopButton_Click(object sender, EventArgs e)
+        {
+            this.stopTimer();
+        }
     }
 
     public class TimeTask {
+        public DateTime UndefinedDate = DateTime.Parse("2100-01-01 00:00:00");
+
         private string _taskName;
         private DateTime _startTime;
         private DateTime _endTime;
@@ -166,18 +261,18 @@ namespace TimeTrack
         public string TaskName {get { return _taskName; } set { _taskName = value; }}
         public DateTime StartTime {get { return _startTime; } set { _startTime = value; }}
         public DateTime EndTime { get { return _endTime; } set { _endTime = value; } }
-        public TimeSpan Duration {get { return ((this.EndTime == DateTime.MaxValue)?DateTime.Now:this.EndTime) - this.StartTime; } }
+        public TimeSpan Duration {get { return (TimeSpan)(((this.EndTime == this.UndefinedDate)?DateTime.Now:this.EndTime) - this.StartTime); } }
 
         public TimeTask() {
             this.TaskName = "";
-            this.StartTime = DateTime.MaxValue;
-            this.EndTime = DateTime.MaxValue;
+            this.StartTime = this.UndefinedDate;
+            this.EndTime = this.UndefinedDate;
         }
 
         public TimeTask(string TaskName, DateTime StartTime) {
             this.TaskName = TaskName;
             this.StartTime = StartTime;
-            this.EndTime = DateTime.MaxValue;
+            this.EndTime = this.UndefinedDate;
         }
 
         public TimeTask(string TaskName, DateTime StartTime, DateTime EndTime) {
@@ -191,7 +286,7 @@ namespace TimeTrack
             string[] listItems = new string[4];
             listItems[0] = String.Format("{0:d2}:{1:d2}", StartTime.Hour, StartTime.Minute); 
             
-            if(EndTime != DateTime.MaxValue) {
+            if(EndTime != this.UndefinedDate) {
                 listItems[1] = String.Format("{0:d2}:{1:d2}", EndTime.Hour, EndTime.Minute); 
                 listItems[2] = String.Format("{0:d2}:{1:d2}", Duration.Hours, Duration.Minutes); 
             } else {
@@ -238,5 +333,47 @@ namespace TimeTrack
             newItem.Tag = this;
             return newItem;
         }
+    }
+
+    public static class DataStorage {
+        const string TASKLIST_FILE = @"\tasklist.json";
+        const string COMMONTASK_FILE = @"\commontasks.json";
+
+        public static void SaveTaskList(TimeTask[] TaskList) 
+        {
+            string jsonData = JavaScriptConvert.SerializeObject(TaskList);
+            File.WriteAllText(Application.UserAppDataPath + TASKLIST_FILE, jsonData);
+        }
+
+        public static TimeTask[] ReadTaskList() 
+        {
+            try {
+                string jsonData = File.ReadAllText(Application.UserAppDataPath + TASKLIST_FILE);
+                return (TimeTask[])JavaScriptConvert.DeserializeObject(jsonData, typeof(TimeTask[]));
+            } catch(FileNotFoundException) {
+                return null;
+            }
+        }
+
+        public static void SaveCommonTasks(string[] TaskList) 
+        {
+            string jsonData = JavaScriptConvert.SerializeObject(TaskList);
+            File.WriteAllText(Application.UserAppDataPath + COMMONTASK_FILE, jsonData);
+        }
+
+        public static TimeTask[] ReadCommonTasks() 
+        {
+            try {
+                string jsonData = File.ReadAllText(Application.UserAppDataPath + COMMONTASK_FILE);
+                return (TimeTask[])JavaScriptConvert.DeserializeObject(jsonData, typeof(string[]));
+            } catch(FileNotFoundException) {
+                return null;
+            }
+        }
+    }
+
+    public enum TimerState {
+        Stopped,
+        Running
     }
 }

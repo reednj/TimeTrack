@@ -37,7 +37,7 @@ namespace TimeTrack
             this.taskNameTxt = new System.Windows.Forms.ComboBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.timeList = new System.Windows.Forms.ListView();
+            this.timeListView = new System.Windows.Forms.ListView();
             this.StartHeader1 = new System.Windows.Forms.ColumnHeader();
             this.EndHeader = new System.Windows.Forms.ColumnHeader();
             this.DurHeader1 = new System.Windows.Forms.ColumnHeader();
@@ -46,6 +46,8 @@ namespace TimeTrack
             this.summaryListView = new System.Windows.Forms.ListView();
             this.columnHeader1 = new System.Windows.Forms.ColumnHeader();
             this.columnHeader2 = new System.Windows.Forms.ColumnHeader();
+            this.clearButton = new System.Windows.Forms.Button();
+            this.stopButton = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -66,7 +68,7 @@ namespace TimeTrack
             this.startStopButton.Font = new System.Drawing.Font("Arial", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.startStopButton.Location = new System.Drawing.Point(5, 78);
             this.startStopButton.Name = "startStopButton";
-            this.startStopButton.Size = new System.Drawing.Size(213, 45);
+            this.startStopButton.Size = new System.Drawing.Size(209, 45);
             this.startStopButton.TabIndex = 1;
             this.startStopButton.Text = "Start";
             this.startStopButton.UseVisualStyleBackColor = true;
@@ -98,10 +100,9 @@ namespace TimeTrack
             this.taskNameTxt.FormattingEnabled = true;
             this.taskNameTxt.Location = new System.Drawing.Point(5, 129);
             this.taskNameTxt.Name = "taskNameTxt";
-            this.taskNameTxt.Size = new System.Drawing.Size(213, 21);
+            this.taskNameTxt.Size = new System.Drawing.Size(209, 21);
             this.taskNameTxt.TabIndex = 5;
             this.taskNameTxt.Text = "Type Task Code Here";
-            this.taskNameTxt.Enter += new System.EventHandler(this.taskNameTxt_Enter);
             this.taskNameTxt.KeyDown += new System.Windows.Forms.KeyEventHandler(this.taskNameTxt_KeyDown);
             // 
             // tabControl1
@@ -111,34 +112,35 @@ namespace TimeTrack
             this.tabControl1.Location = new System.Drawing.Point(5, 156);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(213, 280);
+            this.tabControl1.Size = new System.Drawing.Size(213, 275);
             this.tabControl1.TabIndex = 7;
             // 
             // tabPage1
             // 
-            this.tabPage1.Controls.Add(this.timeList);
+            this.tabPage1.Controls.Add(this.timeListView);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(205, 254);
+            this.tabPage1.Size = new System.Drawing.Size(205, 249);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Tasks";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
-            // timeList
+            // timeListView
             // 
-            this.timeList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.timeListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.StartHeader1,
             this.EndHeader,
             this.DurHeader1,
             this.NameHeader1});
-            this.timeList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.timeList.Location = new System.Drawing.Point(3, 3);
-            this.timeList.Name = "timeList";
-            this.timeList.Size = new System.Drawing.Size(199, 248);
-            this.timeList.TabIndex = 3;
-            this.timeList.UseCompatibleStateImageBehavior = false;
-            this.timeList.View = System.Windows.Forms.View.Details;
+            this.timeListView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.timeListView.FullRowSelect = true;
+            this.timeListView.Location = new System.Drawing.Point(3, 3);
+            this.timeListView.Name = "timeListView";
+            this.timeListView.Size = new System.Drawing.Size(199, 243);
+            this.timeListView.TabIndex = 3;
+            this.timeListView.UseCompatibleStateImageBehavior = false;
+            this.timeListView.View = System.Windows.Forms.View.Details;
             // 
             // StartHeader1
             // 
@@ -166,7 +168,7 @@ namespace TimeTrack
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(205, 254);
+            this.tabPage2.Size = new System.Drawing.Size(205, 249);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Summary";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -177,9 +179,10 @@ namespace TimeTrack
             this.columnHeader1,
             this.columnHeader2});
             this.summaryListView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.summaryListView.FullRowSelect = true;
             this.summaryListView.Location = new System.Drawing.Point(3, 3);
             this.summaryListView.Name = "summaryListView";
-            this.summaryListView.Size = new System.Drawing.Size(199, 248);
+            this.summaryListView.Size = new System.Drawing.Size(199, 243);
             this.summaryListView.TabIndex = 7;
             this.summaryListView.UseCompatibleStateImageBehavior = false;
             this.summaryListView.View = System.Windows.Forms.View.Details;
@@ -195,11 +198,33 @@ namespace TimeTrack
             this.columnHeader2.Text = "Task";
             this.columnHeader2.Width = 120;
             // 
+            // clearButton
+            // 
+            this.clearButton.Location = new System.Drawing.Point(162, 433);
+            this.clearButton.Name = "clearButton";
+            this.clearButton.Size = new System.Drawing.Size(49, 26);
+            this.clearButton.TabIndex = 8;
+            this.clearButton.Text = "Clear";
+            this.clearButton.UseVisualStyleBackColor = true;
+            this.clearButton.Click += new System.EventHandler(this.clearButton_Click);
+            // 
+            // stopButton
+            // 
+            this.stopButton.Location = new System.Drawing.Point(107, 433);
+            this.stopButton.Name = "stopButton";
+            this.stopButton.Size = new System.Drawing.Size(49, 26);
+            this.stopButton.TabIndex = 9;
+            this.stopButton.Text = "Stop";
+            this.stopButton.UseVisualStyleBackColor = true;
+            this.stopButton.Click += new System.EventHandler(this.stopButton_Click);
+            // 
             // timerMainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(219, 438);
+            this.ClientSize = new System.Drawing.Size(221, 463);
+            this.Controls.Add(this.stopButton);
+            this.Controls.Add(this.clearButton);
             this.Controls.Add(this.curTaskLabel);
             this.Controls.Add(this.taskNameTxt);
             this.Controls.Add(this.startStopButton);
@@ -230,7 +255,7 @@ namespace TimeTrack
         private System.Windows.Forms.ComboBox taskNameTxt;
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabPage1;
-        private System.Windows.Forms.ListView timeList;
+        private System.Windows.Forms.ListView timeListView;
         private System.Windows.Forms.ColumnHeader StartHeader1;
         private System.Windows.Forms.ColumnHeader EndHeader;
         private System.Windows.Forms.ColumnHeader DurHeader1;
@@ -239,6 +264,8 @@ namespace TimeTrack
         private System.Windows.Forms.ListView summaryListView;
         private System.Windows.Forms.ColumnHeader columnHeader1;
         private System.Windows.Forms.ColumnHeader columnHeader2;
+        private System.Windows.Forms.Button clearButton;
+        private System.Windows.Forms.Button stopButton;
     }
 }
 
