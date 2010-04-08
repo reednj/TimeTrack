@@ -90,12 +90,7 @@ namespace TimeTrack
 
         private void taskNameTxt_Enter(object sender, EventArgs e)
         {
-            // get rid of the hint text, really should check against the 
-            // forecolor, should have a flag instead. but dont care right now
-            if(taskNameTxt.ForeColor == Color.Gray) {
-                taskNameTxt.ForeColor = Color.Black;
-                taskNameTxt.Text = "";
-            }
+
         }
 
         private void chromeTimer_Tick(object sender, EventArgs e)
@@ -106,6 +101,13 @@ namespace TimeTrack
 
         private void taskNameTxt_KeyDown(object sender, KeyEventArgs e)
         {
+            // get rid of the hint text, really should check against the 
+            // forecolor, should have a flag instead. but dont care right now
+            if(taskNameTxt.ForeColor == Color.Gray) {
+                taskNameTxt.ForeColor = Color.Black;
+                taskNameTxt.Text = "";
+            }
+
             if(e.KeyCode == Keys.Enter) {
                 startNewTask();
                 e.SuppressKeyPress = true;
@@ -132,6 +134,7 @@ namespace TimeTrack
             // update the total time if it does.
             foreach(ListViewItem taskEntry in timeList.Items) {
                 TimeTask currentTask = taskEntry.Tag as TimeTask;
+
                 SummaryTask sumItem = summaryList.Find(delegate(SummaryTask st) {return st.TaskName == currentTask.TaskName;});
                 if(sumItem == null) {
                     summaryList.Add(new SummaryTask(currentTask.TaskName, currentTask.Duration));
@@ -151,6 +154,7 @@ namespace TimeTrack
         private void timerMainForm_Activated(object sender, EventArgs e)
         {
             taskNameTxt.Focus();
+            taskNameTxt.Select(0, 0);
         }
     }
 
