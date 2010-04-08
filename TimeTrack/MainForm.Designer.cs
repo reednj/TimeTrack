@@ -44,12 +44,12 @@ namespace TimeTrack
             this.quitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
             this.timeList = new System.Windows.Forms.ListView();
             this.StartHeader1 = new System.Windows.Forms.ColumnHeader();
             this.EndHeader = new System.Windows.Forms.ColumnHeader();
             this.DurHeader1 = new System.Windows.Forms.ColumnHeader();
             this.NameHeader1 = new System.Windows.Forms.ColumnHeader();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
             this.summaryList = new System.Windows.Forms.ListView();
             this.columnHeader1 = new System.Windows.Forms.ColumnHeader();
             this.columnHeader2 = new System.Windows.Forms.ColumnHeader();
@@ -172,21 +172,10 @@ namespace TimeTrack
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(205, 268);
+            this.tabPage1.Size = new System.Drawing.Size(205, 254);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Tasks";
             this.tabPage1.UseVisualStyleBackColor = true;
-            // 
-            // tabPage2
-            // 
-            this.tabPage2.Controls.Add(this.summaryList);
-            this.tabPage2.Location = new System.Drawing.Point(4, 22);
-            this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(205, 254);
-            this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "Summary";
-            this.tabPage2.UseVisualStyleBackColor = true;
             // 
             // timeList
             // 
@@ -198,7 +187,7 @@ namespace TimeTrack
             this.timeList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.timeList.Location = new System.Drawing.Point(3, 3);
             this.timeList.Name = "timeList";
-            this.timeList.Size = new System.Drawing.Size(199, 262);
+            this.timeList.Size = new System.Drawing.Size(199, 248);
             this.timeList.TabIndex = 3;
             this.timeList.UseCompatibleStateImageBehavior = false;
             this.timeList.View = System.Windows.Forms.View.Details;
@@ -222,6 +211,17 @@ namespace TimeTrack
             // 
             this.NameHeader1.Text = "Task";
             this.NameHeader1.Width = 65;
+            // 
+            // tabPage2
+            // 
+            this.tabPage2.Controls.Add(this.summaryList);
+            this.tabPage2.Location = new System.Drawing.Point(4, 22);
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage2.Size = new System.Drawing.Size(205, 254);
+            this.tabPage2.TabIndex = 1;
+            this.tabPage2.Text = "Summary";
+            this.tabPage2.UseVisualStyleBackColor = true;
             // 
             // summaryList
             // 
@@ -251,12 +251,13 @@ namespace TimeTrack
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(223, 438);
+            this.ClientSize = new System.Drawing.Size(219, 438);
             this.Controls.Add(this.curTaskLabel);
             this.Controls.Add(this.taskNameTxt);
             this.Controls.Add(this.startStopButton);
             this.Controls.Add(this.timerLabel);
             this.Controls.Add(this.tabControl1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.Name = "timerMainForm";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;

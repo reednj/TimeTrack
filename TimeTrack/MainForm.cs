@@ -10,12 +10,9 @@ namespace TimeTrack
 {
     public partial class timerMainForm : Form
     {
-        DateTime startTime;
-        DateTime endTime;
-        string taskName;
-        Random randGen;
 
         bool isRunning;
+        TimeTask currentTask;
 
         public timerMainForm()
         {
@@ -24,7 +21,6 @@ namespace TimeTrack
         
         private void timerMainForm_Load(object sender, EventArgs e)
         {
-            randGen = new Random();
             summaryList.Sorting = SortOrder.Descending;
             isRunning = false;
 
@@ -52,22 +48,15 @@ namespace TimeTrack
 
             if (isRunning == true)
             {
-                endTime = DateTime.Now;
-                //TimeSpan taskLength = endTime - startTime;
-                TimeSpan taskLength = new TimeSpan(0, randGen.Next(10, 60), 0);
+                currentTask.EndTime = DateTime.Now; //+ TimeSpan.FromMinutes(120);
 
                 // remove the bottom row of the list, where it shows the current task
                 timeList.Items.RemoveAt(timeList.Items.Count-1);
 
                 // add the current task to the task list
                 // but only if it is longer than 5 minutes, otherwise just ignore it
-                if(taskLength > new TimeSpan(0, 5, 0)) {
-                    // add the row for the just finished task
-                    listItems[0] = String.Format("{0:d2}:{1:d2}", startTime.Hour, startTime.Minute); 
-                    listItems[1] = String.Format("{0:d2}:{1:d2}", endTime.Hour, endTime.Minute); 
-                    listItems[2] = String.Format("{0:d2}:{1:d2}", taskLength.Hours, taskLength.Minutes); 
-                    listItems[3] = taskName;
-                    timeList.Items.Add(new ListViewItem(listItems));
+                if(currentTask.Duration > TimeSpan.FromMinutes(5)) {
+                    timeList.Items.Add(currentTask.toListViewItem());
                 }
             }
             else
@@ -82,18 +71,13 @@ namespace TimeTrack
                 taskNameTxt.Items.Add(taskNameTxt.Text);
             }
             
-            // set/reset all the right params
-            startTime = DateTime.Now;
-            taskName = taskNameTxt.Text;
+            
+            currentTask = new TimeTask(taskNameTxt.Text, DateTime.Now);
+            curTaskLabel.Text = "Current Task: " + currentTask.TaskName;
             taskNameTxt.Text = "";
-            curTaskLabel.Text = "Current Task: " + taskName;
 
             // add the currently running task to the bottom row
-            listItems[0] = String.Format("{0:d2}:{1:d2}", startTime.Hour, startTime.Minute);
-            listItems[1] = "--";
-            listItems[2] = "--";
-            listItems[3] = taskName;
-            timeList.Items.Add(new ListViewItem(listItems));
+            timeList.Items.Add(currentTask.toListViewItem());
 
             // regenerate the summary list
             generateSummaryList();
@@ -101,10 +85,7 @@ namespace TimeTrack
 
         private void mainTimer_Tick(object sender, EventArgs e)
         {
-            TimeSpan timeDiff = DateTime.Now - startTime;
-            string timeString = String.Format("{0:d2}:{1:d2}:{2:d2}", timeDiff.Hours, timeDiff.Minutes, timeDiff.Seconds);
-
-            timerLabel.Text = timeString;
+            timerLabel.Text = currentTask.ToString();
         }
 
         private void taskNameTxt_Enter(object sender, EventArgs e)
@@ -172,6 +153,60 @@ namespace TimeTrack
             }
 
             summaryList.Sort();
+        }
+    }
+
+    public class TimeTask {
+        private string _taskName;
+        private DateTime _startTime;
+        private DateTime _endTime;
+
+        public string TaskName {get { return _taskName; } set { _taskName = value; }}
+        public DateTime StartTime {get { return _startTime; } set { _startTime = value; }}
+        public DateTime EndTime { get { return _endTime; } set { _endTime = value; } }
+        public TimeSpan Duration {get { return ((this.EndTime == DateTime.MaxValue)?DateTime.Now:this.EndTime) - this.StartTime; } }
+
+        public TimeTask() {
+            this.TaskName = "";
+            this.StartTime = DateTime.MaxValue;
+            this.EndTime = DateTime.MaxValue;
+        }
+
+        public TimeTask(string TaskName, DateTime StartTime) {
+            this.TaskName = TaskName;
+            this.StartTime = StartTime;
+            this.EndTime = DateTime.MaxValue;
+        }
+
+        public TimeTask(string TaskName, DateTime StartTime, DateTime EndTime) {
+            this.TaskName = TaskName;
+            this.StartTime = StartTime;
+            this.EndTime = EndTime;
+        }
+
+        public ListViewItem toListViewItem()
+        {
+            string[] listItems = new string[4];
+            listItems[0] = String.Format("{0:d2}:{1:d2}", StartTime.Hour, StartTime.Minute); 
+            
+            if(EndTime != DateTime.MaxValue) {
+                listItems[1] = String.Format("{0:d2}:{1:d2}", EndTime.Hour, EndTime.Minute); 
+                listItems[2] = String.Format("{0:d2}:{1:d2}", Duration.Hours, Duration.Minutes); 
+            } else {
+                // if there is no end time set, then just shove in some dashes
+                listItems[1] = "--";
+                listItems[2] = "--";
+            }
+            listItems[3] = TaskName;
+
+            ListViewItem newItem = new ListViewItem(listItems);
+            newItem.Tag = this;
+            return newItem;
+        }
+
+        public override string ToString()
+        {
+            return String.Format("{0:d2}:{1:d2}:{2:d2}", this.Duration.Hours,this.Duration.Minutes, this.Duration.Seconds);
         }
     }
 }
