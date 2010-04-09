@@ -37,6 +37,9 @@ namespace TimeTrack
                 if(currentTask != null && currentTask.EndTime == currentTask.UndefinedDate) {
                     this.currentState = TimerState.Running; 
                 }
+
+                // calc the summarys
+                this.generateSummaryList();
             }
 
             this.updateControlState();
