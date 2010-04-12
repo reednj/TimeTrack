@@ -290,7 +290,10 @@ namespace TimeTrack
 
         private void clearButton_Click(object sender, EventArgs e)
         {
-            this.clearTaskList();
+            if (MessageBox.Show("Are you sure you want to clear task data?", "Confirm Clear Tasks", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                this.clearTaskList();
+            }
         }
 
         private void stopButton_Click(object sender, EventArgs e)
