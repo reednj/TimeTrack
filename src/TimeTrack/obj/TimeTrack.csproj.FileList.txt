@@ -1,0 +1,9 @@
+bin\Debug\TimeTrack.exe
+bin\Debug\TimeTrack.pdb
+obj\Debug\ResolveAssemblyReference.cache
+obj\Debug\TimeTrack.timerMainForm.resources
+obj\Debug\TimeTrack.Properties.Resources.resources
+obj\Debug\TimeTrack.csproj.GenerateResource.Cache
+obj\Debug\TimeTrack.exe
+obj\Debug\TimeTrack.pdb
+bin\Debug\Newtonsoft.Json.dll
