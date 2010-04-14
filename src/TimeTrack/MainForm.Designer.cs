@@ -48,9 +48,12 @@ namespace TimeTrack
             this.columnHeader2 = new System.Windows.Forms.ColumnHeader();
             this.clearButton = new System.Windows.Forms.Button();
             this.stopButton = new System.Windows.Forms.Button();
+            this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.NotesTxt = new System.Windows.Forms.TextBox();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
+            this.tabPage3.SuspendLayout();
             this.SuspendLayout();
             // 
             // timerLabel
@@ -111,6 +114,7 @@ namespace TimeTrack
             // 
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
+            this.tabControl1.Controls.Add(this.tabPage3);
             this.tabControl1.Location = new System.Drawing.Point(5, 156);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
@@ -220,6 +224,27 @@ namespace TimeTrack
             this.stopButton.UseVisualStyleBackColor = true;
             this.stopButton.Click += new System.EventHandler(this.stopButton_Click);
             // 
+            // tabPage3
+            // 
+            this.tabPage3.Controls.Add(this.NotesTxt);
+            this.tabPage3.Location = new System.Drawing.Point(4, 22);
+            this.tabPage3.Name = "tabPage3";
+            this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage3.Size = new System.Drawing.Size(205, 249);
+            this.tabPage3.TabIndex = 2;
+            this.tabPage3.Text = "Notes";
+            this.tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // NotesTxt
+            // 
+            this.NotesTxt.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.NotesTxt.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.NotesTxt.Location = new System.Drawing.Point(3, 3);
+            this.NotesTxt.Multiline = true;
+            this.NotesTxt.Name = "NotesTxt";
+            this.NotesTxt.Size = new System.Drawing.Size(199, 243);
+            this.NotesTxt.TabIndex = 0;
+            // 
             // timerMainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -242,6 +267,8 @@ namespace TimeTrack
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
+            this.tabPage3.ResumeLayout(false);
+            this.tabPage3.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -268,6 +295,8 @@ namespace TimeTrack
         private System.Windows.Forms.ColumnHeader columnHeader2;
         private System.Windows.Forms.Button clearButton;
         private System.Windows.Forms.Button stopButton;
+        private System.Windows.Forms.TabPage tabPage3;
+        private System.Windows.Forms.TextBox NotesTxt;
     }
 }
 
