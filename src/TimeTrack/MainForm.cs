@@ -27,6 +27,7 @@ namespace TimeTrack
             // load the previously saved results, as well as the common task list
             this.PopulateTaskListView(DataStorage.ReadTaskList());
             this.PopulateCommonTaskList(DataStorage.ReadCommonTasks());
+            this.PopulateNotes(DataStorage.ReadNotes());
 
             // if we have added some tasks then start the timer.
             if(timeListView.Items.Count > 0) {
@@ -210,6 +211,11 @@ namespace TimeTrack
             }
         }
 
+        private void PopulateNotes(string Notes) 
+        {
+            NotesTxt.Text = Notes;
+        }
+
         private void stopTimer()
         {
             // stop the current task, mark it as finished
@@ -234,6 +240,9 @@ namespace TimeTrack
             timeListView.Items.Clear();
             summaryListView.Items.Clear();
             DataStorage.SaveTaskList(this.GetTaskList());
+
+            // clear the notes
+            NotesTxt.Text = "";
         }
 
         // sets the state of the controls based on the current application state
@@ -312,6 +321,11 @@ namespace TimeTrack
         }
 
         #endregion
+
+        private void timerMainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            DataStorage.SaveNotes(NotesTxt.Text);
+        }
     }
 
     public enum TimerState {

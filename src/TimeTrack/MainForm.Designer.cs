@@ -46,10 +46,11 @@ namespace TimeTrack
             this.summaryListView = new System.Windows.Forms.ListView();
             this.columnHeader1 = new System.Windows.Forms.ColumnHeader();
             this.columnHeader2 = new System.Windows.Forms.ColumnHeader();
-            this.clearButton = new System.Windows.Forms.Button();
-            this.stopButton = new System.Windows.Forms.Button();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.NotesTxt = new System.Windows.Forms.TextBox();
+            this.clearButton = new System.Windows.Forms.Button();
+            this.stopButton = new System.Windows.Forms.Button();
+            this.TotalLbl = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -204,26 +205,6 @@ namespace TimeTrack
             this.columnHeader2.Text = "Task";
             this.columnHeader2.Width = 120;
             // 
-            // clearButton
-            // 
-            this.clearButton.Location = new System.Drawing.Point(162, 433);
-            this.clearButton.Name = "clearButton";
-            this.clearButton.Size = new System.Drawing.Size(49, 26);
-            this.clearButton.TabIndex = 8;
-            this.clearButton.Text = "Clear";
-            this.clearButton.UseVisualStyleBackColor = true;
-            this.clearButton.Click += new System.EventHandler(this.clearButton_Click);
-            // 
-            // stopButton
-            // 
-            this.stopButton.Location = new System.Drawing.Point(107, 433);
-            this.stopButton.Name = "stopButton";
-            this.stopButton.Size = new System.Drawing.Size(49, 26);
-            this.stopButton.TabIndex = 9;
-            this.stopButton.Text = "Stop";
-            this.stopButton.UseVisualStyleBackColor = true;
-            this.stopButton.Click += new System.EventHandler(this.stopButton_Click);
-            // 
             // tabPage3
             // 
             this.tabPage3.Controls.Add(this.NotesTxt);
@@ -245,11 +226,43 @@ namespace TimeTrack
             this.NotesTxt.Size = new System.Drawing.Size(199, 243);
             this.NotesTxt.TabIndex = 0;
             // 
+            // clearButton
+            // 
+            this.clearButton.Location = new System.Drawing.Point(162, 433);
+            this.clearButton.Name = "clearButton";
+            this.clearButton.Size = new System.Drawing.Size(49, 26);
+            this.clearButton.TabIndex = 8;
+            this.clearButton.Text = "Clear";
+            this.clearButton.UseVisualStyleBackColor = true;
+            this.clearButton.Click += new System.EventHandler(this.clearButton_Click);
+            // 
+            // stopButton
+            // 
+            this.stopButton.Location = new System.Drawing.Point(107, 433);
+            this.stopButton.Name = "stopButton";
+            this.stopButton.Size = new System.Drawing.Size(49, 26);
+            this.stopButton.TabIndex = 9;
+            this.stopButton.Text = "Stop";
+            this.stopButton.UseVisualStyleBackColor = true;
+            this.stopButton.Click += new System.EventHandler(this.stopButton_Click);
+            // 
+            // TotalLbl
+            // 
+            this.TotalLbl.AutoSize = true;
+            this.TotalLbl.ForeColor = System.Drawing.Color.DimGray;
+            this.TotalLbl.Location = new System.Drawing.Point(12, 440);
+            this.TotalLbl.Name = "TotalLbl";
+            this.TotalLbl.Size = new System.Drawing.Size(64, 13);
+            this.TotalLbl.TabIndex = 10;
+            this.TotalLbl.Text = "Total: 07:35";
+            this.TotalLbl.Visible = false;
+            // 
             // timerMainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(221, 463);
+            this.Controls.Add(this.TotalLbl);
             this.Controls.Add(this.stopButton);
             this.Controls.Add(this.clearButton);
             this.Controls.Add(this.curTaskLabel);
@@ -263,6 +276,7 @@ namespace TimeTrack
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.Text = "Time Tracker";
             this.Activated += new System.EventHandler(this.timerMainForm_Activated);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.timerMainForm_FormClosing);
             this.Load += new System.EventHandler(this.timerMainForm_Load);
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
@@ -297,6 +311,7 @@ namespace TimeTrack
         private System.Windows.Forms.Button stopButton;
         private System.Windows.Forms.TabPage tabPage3;
         private System.Windows.Forms.TextBox NotesTxt;
+        private System.Windows.Forms.Label TotalLbl;
     }
 }
 
