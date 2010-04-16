@@ -45,7 +45,7 @@ namespace TimeTrack
         {
 
             string[] a = (string[])DeserializeObject(Application.UserAppDataPath + NOTES_FILE, typeof(string[]));
-            return a[0];
+            return (a == null)? null : a[0];
         }
 
         // generic serialization/deserialization methods.
