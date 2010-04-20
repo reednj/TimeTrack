@@ -41,7 +41,9 @@ namespace TimeTrack
 
                 // calc the summarys
                 this.generateSummaryList();
+                this.UpdateTotal();
             }
+
 
             this.updateControlState();
         }
@@ -243,6 +245,8 @@ namespace TimeTrack
 
             // clear the notes
             NotesTxt.Text = "";
+
+            TotalLbl.Text = "Total: 00:00";
         }
 
         // sets the state of the controls based on the current application state
@@ -252,6 +256,7 @@ namespace TimeTrack
 
                 stopButton.Enabled = false;
                 mainTimer.Enabled = false;
+                summaryTimer.Enabled = false;
                 startStopButton.Text = "Start";
                 curTaskLabel.Text = "...";
                 timerLabel.Text = "00:00:00";
@@ -259,6 +264,7 @@ namespace TimeTrack
             } else if(currentState == TimerState.Running) {
                 stopButton.Enabled = true;
                 mainTimer.Enabled = true;
+                summaryTimer.Enabled = true;
                 startStopButton.Text = "New Task";
                 curTaskLabel.Text = "Current Task: " + currentTask.TaskName;
                 this.updateTimerLabel();
@@ -277,7 +283,18 @@ namespace TimeTrack
             }
         }
 
+        private void UpdateTotal()
+        {
+            TimeSpan TotalDuration = new TimeSpan(0);
 
+            foreach (ListViewItem curItem in timeListView.Items)
+            {
+                TimeTask curTask = curItem.Tag as TimeTask;
+                TotalDuration += curTask.Duration;
+            }
+
+            TotalLbl.Text = String.Format("Total: {0:d2}:{1:d2}", TotalDuration.Hours, TotalDuration.Minutes);
+        }
 
         #region MINOR_EVENTS
 
@@ -320,12 +337,18 @@ namespace TimeTrack
             this.disableTaskNameHint();
         }
 
-        #endregion
 
         private void timerMainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             DataStorage.SaveNotes(NotesTxt.Text);
         }
+
+        private void updateSummary_Tick(object sender, EventArgs e)
+        {
+            this.UpdateTotal();
+            this.generateSummaryList();
+        }
+        #endregion
     }
 
     public enum TimerState {

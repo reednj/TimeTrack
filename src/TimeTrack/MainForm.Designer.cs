@@ -51,6 +51,7 @@ namespace TimeTrack
             this.clearButton = new System.Windows.Forms.Button();
             this.stopButton = new System.Windows.Forms.Button();
             this.TotalLbl = new System.Windows.Forms.Label();
+            this.summaryTimer = new System.Windows.Forms.Timer(this.components);
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -107,9 +108,9 @@ namespace TimeTrack
             this.taskNameTxt.Size = new System.Drawing.Size(209, 21);
             this.taskNameTxt.TabIndex = 5;
             this.taskNameTxt.Text = "Type Task Code Here";
-            this.taskNameTxt.TextChanged += new System.EventHandler(this.taskNameTxt_TextChanged);
             this.taskNameTxt.KeyDown += new System.Windows.Forms.KeyEventHandler(this.taskNameTxt_KeyDown);
             this.taskNameTxt.DropDown += new System.EventHandler(this.taskNameTxt_DropDown);
+            this.taskNameTxt.TextChanged += new System.EventHandler(this.taskNameTxt_TextChanged);
             // 
             // tabControl1
             // 
@@ -255,7 +256,11 @@ namespace TimeTrack
             this.TotalLbl.Size = new System.Drawing.Size(64, 13);
             this.TotalLbl.TabIndex = 10;
             this.TotalLbl.Text = "Total: 07:35";
-            this.TotalLbl.Visible = false;
+            // 
+            // summaryTimer
+            // 
+            this.summaryTimer.Interval = 60000;
+            this.summaryTimer.Tick += new System.EventHandler(this.updateSummary_Tick);
             // 
             // timerMainForm
             // 
@@ -275,9 +280,9 @@ namespace TimeTrack
             this.Name = "timerMainForm";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.Text = "Time Tracker";
+            this.Load += new System.EventHandler(this.timerMainForm_Load);
             this.Activated += new System.EventHandler(this.timerMainForm_Activated);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.timerMainForm_FormClosing);
-            this.Load += new System.EventHandler(this.timerMainForm_Load);
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
@@ -312,6 +317,7 @@ namespace TimeTrack
         private System.Windows.Forms.TabPage tabPage3;
         private System.Windows.Forms.TextBox NotesTxt;
         private System.Windows.Forms.Label TotalLbl;
+        private System.Windows.Forms.Timer summaryTimer;
     }
 }
 
