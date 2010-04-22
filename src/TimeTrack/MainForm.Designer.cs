@@ -29,6 +29,7 @@ namespace TimeTrack
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(timerMainForm));
             this.timerLabel = new System.Windows.Forms.Label();
             this.startStopButton = new System.Windows.Forms.Button();
             this.mainTimer = new System.Windows.Forms.Timer(this.components);
@@ -108,9 +109,9 @@ namespace TimeTrack
             this.taskNameTxt.Size = new System.Drawing.Size(209, 21);
             this.taskNameTxt.TabIndex = 5;
             this.taskNameTxt.Text = "Type Task Code Here";
+            this.taskNameTxt.TextChanged += new System.EventHandler(this.taskNameTxt_TextChanged);
             this.taskNameTxt.KeyDown += new System.Windows.Forms.KeyEventHandler(this.taskNameTxt_KeyDown);
             this.taskNameTxt.DropDown += new System.EventHandler(this.taskNameTxt_DropDown);
-            this.taskNameTxt.TextChanged += new System.EventHandler(this.taskNameTxt_TextChanged);
             // 
             // tabControl1
             // 
@@ -276,13 +277,14 @@ namespace TimeTrack
             this.Controls.Add(this.timerLabel);
             this.Controls.Add(this.tabControl1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "timerMainForm";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.Text = "Time Tracker";
-            this.Load += new System.EventHandler(this.timerMainForm_Load);
             this.Activated += new System.EventHandler(this.timerMainForm_Activated);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.timerMainForm_FormClosing);
+            this.Load += new System.EventHandler(this.timerMainForm_Load);
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
