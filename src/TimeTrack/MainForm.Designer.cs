@@ -256,7 +256,7 @@ namespace TimeTrack
             this.TotalLbl.Name = "TotalLbl";
             this.TotalLbl.Size = new System.Drawing.Size(64, 13);
             this.TotalLbl.TabIndex = 10;
-            this.TotalLbl.Text = "Total: 07:35";
+            this.TotalLbl.Text = "Total: 00:00";
             // 
             // summaryTimer
             // 
