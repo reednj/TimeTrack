@@ -109,7 +109,7 @@ namespace TimeTrack
             this.taskNameTxt.Size = new System.Drawing.Size(209, 21);
             this.taskNameTxt.TabIndex = 5;
             this.taskNameTxt.Text = "Type Task Code Here";
-            this.taskNameTxt.TextChanged += new System.EventHandler(this.taskNameTxt_TextChanged);
+            this.taskNameTxt.Enter += new System.EventHandler(this.taskNameTxt_Enter);
             this.taskNameTxt.KeyDown += new System.Windows.Forms.KeyEventHandler(this.taskNameTxt_KeyDown);
             this.taskNameTxt.DropDown += new System.EventHandler(this.taskNameTxt_DropDown);
             // 
@@ -282,7 +282,6 @@ namespace TimeTrack
             this.Name = "timerMainForm";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.Text = "Time Tracker";
-            this.Activated += new System.EventHandler(this.timerMainForm_Activated);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.timerMainForm_FormClosing);
             this.Load += new System.EventHandler(this.timerMainForm_Load);
             this.tabControl1.ResumeLayout(false);

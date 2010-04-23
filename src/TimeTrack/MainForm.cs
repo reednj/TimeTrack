@@ -308,11 +308,6 @@ namespace TimeTrack
             this.updateTimerLabel();
         }
 
-        private void timerMainForm_Activated(object sender, EventArgs e)
-        {
-            taskNameTxt.Focus();
-            taskNameTxt.Select(0, 0);
-        }
 
         private void clearButton_Click(object sender, EventArgs e)
         {
@@ -327,11 +322,6 @@ namespace TimeTrack
             this.stopTimer();
         }
        
-        private void taskNameTxt_TextChanged(object sender, EventArgs e)
-        {
-            this.disableTaskNameHint();
-        }
-
         private void taskNameTxt_DropDown(object sender, EventArgs e)
         {
             this.disableTaskNameHint();
@@ -348,6 +338,12 @@ namespace TimeTrack
             this.UpdateTotal();
             this.generateSummaryList();
         }
+       
+        private void taskNameTxt_Enter(object sender, EventArgs e)
+        {
+            this.disableTaskNameHint();
+        }
+
         #endregion
     }
 
