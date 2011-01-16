@@ -225,6 +225,7 @@ namespace TimeTrack
             this.NotesTxt.Location = new System.Drawing.Point(3, 3);
             this.NotesTxt.Multiline = true;
             this.NotesTxt.Name = "NotesTxt";
+            this.NotesTxt.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.NotesTxt.Size = new System.Drawing.Size(199, 243);
             this.NotesTxt.TabIndex = 0;
             // 
@@ -282,8 +283,8 @@ namespace TimeTrack
             this.Name = "timerMainForm";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.Text = "Time Tracker";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.timerMainForm_FormClosing);
             this.Load += new System.EventHandler(this.timerMainForm_Load);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.timerMainForm_FormClosing);
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
