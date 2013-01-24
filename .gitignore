@@ -1,4 +1,6 @@
+*/_UpgradeReport_Files/*
 src/*/obj/*
 src/*/bin/*
 *.suo
 *.user
+UpgradeLog.XML
