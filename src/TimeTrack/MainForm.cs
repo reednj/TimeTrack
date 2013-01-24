@@ -361,6 +361,7 @@ namespace TimeTrack
         private void timerMainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             DataStorage.SaveNotes(NotesTxt.Text);
+            DataStorage.SaveTaskList(this.GetTaskList());
         }
 
         private void updateSummary_Tick(object sender, EventArgs e)
