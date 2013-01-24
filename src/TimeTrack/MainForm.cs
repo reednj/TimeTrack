@@ -283,6 +283,30 @@ namespace TimeTrack
             }
         }
 
+        private void changeCurrentEventStart(int ChangeMinutes)
+        {
+            if (currentTask.StartTime + TimeSpan.FromMinutes(ChangeMinutes) > DateTime.Now) {
+                // do now allow the start time to be moved into the future
+                return;
+            }
+
+            if (timeListView.Items.Count == 1) {
+                currentTask.StartTime += TimeSpan.FromMinutes(ChangeMinutes);
+                timeListView.Items[timeListView.Items.Count - 1] = currentTask.toListViewItem();
+            } else if (timeListView.Items.Count > 1) {
+                var previousTask = timeListView.Items[timeListView.Items.Count - 2].Tag as TimeTask;
+
+                if (ChangeMinutes > 0 || previousTask.Duration > TimeSpan.FromMinutes(-ChangeMinutes)) {
+                    // only modify the time if the previous event has enough space to remove, or if we are adding time.
+                    currentTask.StartTime += TimeSpan.FromMinutes(ChangeMinutes);
+                    previousTask.EndTime = currentTask.StartTime;
+                    timeListView.Items[timeListView.Items.Count - 1] = currentTask.toListViewItem();
+                    timeListView.Items[timeListView.Items.Count - 2] = previousTask.toListViewItem();
+                }
+            }
+            
+        }
+
         private void UpdateTotal()
         {
             TimeSpan TotalDuration = new TimeSpan(0);
@@ -297,6 +321,11 @@ namespace TimeTrack
         }
 
         #region MINOR_EVENTS
+
+        private void ChangeTestBtn_Click(object sender, EventArgs e)
+        {
+            this.changeCurrentEventStart(15);
+        }
 
         private void startStopButton_Click(object sender, EventArgs e)
         {
@@ -345,6 +374,9 @@ namespace TimeTrack
         }
 
         #endregion
+
+
+
     }
 
     public enum TimerState {

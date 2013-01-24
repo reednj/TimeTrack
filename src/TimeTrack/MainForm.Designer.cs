@@ -39,20 +39,21 @@ namespace TimeTrack
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.timeListView = new System.Windows.Forms.ListView();
-            this.StartHeader1 = new System.Windows.Forms.ColumnHeader();
-            this.EndHeader = new System.Windows.Forms.ColumnHeader();
-            this.DurHeader1 = new System.Windows.Forms.ColumnHeader();
-            this.NameHeader1 = new System.Windows.Forms.ColumnHeader();
+            this.StartHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.EndHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.DurHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.NameHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.summaryListView = new System.Windows.Forms.ListView();
-            this.columnHeader1 = new System.Windows.Forms.ColumnHeader();
-            this.columnHeader2 = new System.Windows.Forms.ColumnHeader();
+            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.NotesTxt = new System.Windows.Forms.TextBox();
             this.clearButton = new System.Windows.Forms.Button();
             this.stopButton = new System.Windows.Forms.Button();
             this.TotalLbl = new System.Windows.Forms.Label();
             this.summaryTimer = new System.Windows.Forms.Timer(this.components);
+            this.ChangeTestBtn = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -74,7 +75,7 @@ namespace TimeTrack
             this.startStopButton.Font = new System.Drawing.Font("Arial", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.startStopButton.Location = new System.Drawing.Point(5, 78);
             this.startStopButton.Name = "startStopButton";
-            this.startStopButton.Size = new System.Drawing.Size(209, 45);
+            this.startStopButton.Size = new System.Drawing.Size(151, 45);
             this.startStopButton.TabIndex = 1;
             this.startStopButton.Text = "Start";
             this.startStopButton.UseVisualStyleBackColor = true;
@@ -109,9 +110,9 @@ namespace TimeTrack
             this.taskNameTxt.Size = new System.Drawing.Size(209, 21);
             this.taskNameTxt.TabIndex = 5;
             this.taskNameTxt.Text = "Type Task Code Here";
+            this.taskNameTxt.DropDown += new System.EventHandler(this.taskNameTxt_DropDown);
             this.taskNameTxt.Enter += new System.EventHandler(this.taskNameTxt_Enter);
             this.taskNameTxt.KeyDown += new System.Windows.Forms.KeyEventHandler(this.taskNameTxt_KeyDown);
-            this.taskNameTxt.DropDown += new System.EventHandler(this.taskNameTxt_DropDown);
             // 
             // tabControl1
             // 
@@ -264,11 +265,22 @@ namespace TimeTrack
             this.summaryTimer.Interval = 60000;
             this.summaryTimer.Tick += new System.EventHandler(this.updateSummary_Tick);
             // 
+            // ChangeTestBtn
+            // 
+            this.ChangeTestBtn.Location = new System.Drawing.Point(162, 78);
+            this.ChangeTestBtn.Name = "ChangeTestBtn";
+            this.ChangeTestBtn.Size = new System.Drawing.Size(47, 45);
+            this.ChangeTestBtn.TabIndex = 11;
+            this.ChangeTestBtn.Text = "+15";
+            this.ChangeTestBtn.UseVisualStyleBackColor = true;
+            this.ChangeTestBtn.Click += new System.EventHandler(this.ChangeTestBtn_Click);
+            // 
             // timerMainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(221, 463);
+            this.Controls.Add(this.ChangeTestBtn);
             this.Controls.Add(this.TotalLbl);
             this.Controls.Add(this.stopButton);
             this.Controls.Add(this.clearButton);
@@ -283,8 +295,8 @@ namespace TimeTrack
             this.Name = "timerMainForm";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.Text = "Time Tracker";
-            this.Load += new System.EventHandler(this.timerMainForm_Load);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.timerMainForm_FormClosing);
+            this.Load += new System.EventHandler(this.timerMainForm_Load);
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
@@ -320,6 +332,7 @@ namespace TimeTrack
         private System.Windows.Forms.TextBox NotesTxt;
         private System.Windows.Forms.Label TotalLbl;
         private System.Windows.Forms.Timer summaryTimer;
+        private System.Windows.Forms.Button ChangeTestBtn;
     }
 }
 
