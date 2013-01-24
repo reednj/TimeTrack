@@ -8,13 +8,9 @@ namespace TimeTrack
     public class TimeTask {
         public DateTime UndefinedDate = DateTime.Parse("2100-01-01 00:00:00");
 
-        private string _taskName;
-        private DateTime _startTime;
-        private DateTime _endTime;
-
-        public string TaskName {get { return _taskName; } set { _taskName = value; }}
-        public DateTime StartTime {get { return _startTime; } set { _startTime = value; }}
-        public DateTime EndTime { get { return _endTime; } set { _endTime = value; } }
+        public string TaskName { get; set; }
+        public DateTime StartTime { get; set; }
+        public DateTime EndTime { get; set; }
         public TimeSpan Duration {get { return (TimeSpan)(((this.EndTime == this.UndefinedDate)?DateTime.Now:this.EndTime) - this.StartTime); } }
 
         public TimeTask() {
