@@ -13,6 +13,7 @@ namespace TimeTrack
 
         TimeTask currentTask;
         TimerState currentState = TimerState.Stopped;
+        const int TimeModifyIncrementMinutes = 15;
 
         public timerMainForm()
         {
@@ -310,7 +311,7 @@ namespace TimeTrack
         private void UpdateTotal()
         {
             TimeSpan TotalDuration = new TimeSpan(0);
-
+            
             foreach (ListViewItem curItem in timeListView.Items)
             {
                 TimeTask curTask = curItem.Tag as TimeTask;
@@ -373,8 +374,26 @@ namespace TimeTrack
             this.disableTaskNameHint();
         }
 
-        #endregion
+        private void listContextMenu_Opening(object sender, CancelEventArgs e)
+        {
+            if (timeListView.Items[timeListView.Items.Count - 1].Selected) {
+                listContextMenu.Enabled = true;
+            } else {
+                listContextMenu.Enabled = false;
+            }
+        }
 
+        private void minFromStartTimeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.changeCurrentEventStart(-TimeModifyIncrementMinutes);
+        }
+
+        private void minToStartTimeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.changeCurrentEventStart(TimeModifyIncrementMinutes);
+        }
+
+        #endregion
 
 
     }

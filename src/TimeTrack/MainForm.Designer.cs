@@ -53,11 +53,14 @@ namespace TimeTrack
             this.stopButton = new System.Windows.Forms.Button();
             this.TotalLbl = new System.Windows.Forms.Label();
             this.summaryTimer = new System.Windows.Forms.Timer(this.components);
-            this.ChangeTestBtn = new System.Windows.Forms.Button();
+            this.listContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.minToStartTimeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.minFromStartTimeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tabPage3.SuspendLayout();
+            this.listContextMenu.SuspendLayout();
             this.SuspendLayout();
             // 
             // timerLabel
@@ -75,7 +78,7 @@ namespace TimeTrack
             this.startStopButton.Font = new System.Drawing.Font("Arial", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.startStopButton.Location = new System.Drawing.Point(5, 78);
             this.startStopButton.Name = "startStopButton";
-            this.startStopButton.Size = new System.Drawing.Size(151, 45);
+            this.startStopButton.Size = new System.Drawing.Size(209, 45);
             this.startStopButton.TabIndex = 1;
             this.startStopButton.Text = "Start";
             this.startStopButton.UseVisualStyleBackColor = true;
@@ -143,6 +146,7 @@ namespace TimeTrack
             this.EndHeader,
             this.DurHeader1,
             this.NameHeader1});
+            this.timeListView.ContextMenuStrip = this.listContextMenu;
             this.timeListView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.timeListView.FullRowSelect = true;
             this.timeListView.Location = new System.Drawing.Point(3, 3);
@@ -265,22 +269,35 @@ namespace TimeTrack
             this.summaryTimer.Interval = 60000;
             this.summaryTimer.Tick += new System.EventHandler(this.updateSummary_Tick);
             // 
-            // ChangeTestBtn
+            // listContextMenu
             // 
-            this.ChangeTestBtn.Location = new System.Drawing.Point(162, 78);
-            this.ChangeTestBtn.Name = "ChangeTestBtn";
-            this.ChangeTestBtn.Size = new System.Drawing.Size(47, 45);
-            this.ChangeTestBtn.TabIndex = 11;
-            this.ChangeTestBtn.Text = "+15";
-            this.ChangeTestBtn.UseVisualStyleBackColor = true;
-            this.ChangeTestBtn.Click += new System.EventHandler(this.ChangeTestBtn_Click);
+            this.listContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.minToStartTimeToolStripMenuItem,
+            this.minFromStartTimeToolStripMenuItem});
+            this.listContextMenu.Name = "listContextMenu";
+            this.listContextMenu.ShowImageMargin = false;
+            this.listContextMenu.Size = new System.Drawing.Size(177, 48);
+            this.listContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.listContextMenu_Opening);
+            // 
+            // minToStartTimeToolStripMenuItem
+            // 
+            this.minToStartTimeToolStripMenuItem.Name = "minToStartTimeToolStripMenuItem";
+            this.minToStartTimeToolStripMenuItem.Size = new System.Drawing.Size(176, 22);
+            this.minToStartTimeToolStripMenuItem.Text = "+15 min to Start Time";
+            this.minToStartTimeToolStripMenuItem.Click += new System.EventHandler(this.minToStartTimeToolStripMenuItem_Click);
+            // 
+            // minFromStartTimeToolStripMenuItem
+            // 
+            this.minFromStartTimeToolStripMenuItem.Name = "minFromStartTimeToolStripMenuItem";
+            this.minFromStartTimeToolStripMenuItem.Size = new System.Drawing.Size(176, 22);
+            this.minFromStartTimeToolStripMenuItem.Text = "-15 min from Start Time";
+            this.minFromStartTimeToolStripMenuItem.Click += new System.EventHandler(this.minFromStartTimeToolStripMenuItem_Click);
             // 
             // timerMainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(221, 463);
-            this.Controls.Add(this.ChangeTestBtn);
             this.Controls.Add(this.TotalLbl);
             this.Controls.Add(this.stopButton);
             this.Controls.Add(this.clearButton);
@@ -302,6 +319,7 @@ namespace TimeTrack
             this.tabPage2.ResumeLayout(false);
             this.tabPage3.ResumeLayout(false);
             this.tabPage3.PerformLayout();
+            this.listContextMenu.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -332,7 +350,9 @@ namespace TimeTrack
         private System.Windows.Forms.TextBox NotesTxt;
         private System.Windows.Forms.Label TotalLbl;
         private System.Windows.Forms.Timer summaryTimer;
-        private System.Windows.Forms.Button ChangeTestBtn;
+        private System.Windows.Forms.ContextMenuStrip listContextMenu;
+        private System.Windows.Forms.ToolStripMenuItem minToStartTimeToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem minFromStartTimeToolStripMenuItem;
     }
 }
 
